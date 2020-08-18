@@ -15,6 +15,15 @@
  */
 buildscript {
     repositories {
+        mavenLocal()
+        maven {
+            url = 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+        maven {
+            url = 'http://maven.aliyun.com/nexus/content/repositories/jcenter'
+        }
+        mavenCentral()
+        google()
         jcenter()
     }
     tasks.withType(JavaCompile) {
@@ -127,12 +136,42 @@ subprojects {
     }
 
     repositories {
+        mavenLocal()
+        maven {
+            url = 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+        maven {
+            url = 'http://maven.aliyun.com/nexus/content/repositories/jcenter'
+        }
         mavenCentral()
+        google()
+        jcenter()
     }
 
     test {
         testLogging {
             exceptionFormat = 'full'
+        }
+    }
+}
+
+
+project.ext.set("maven_version", apktoolversion_major)
+
+parseLocalProperties()
+
+def parseLocalProperties() {
+    File file = rootProject.file('local.properties')
+    if(file.exists()) {
+        InputStream inputStream = rootProject.file('local.properties').newDataInputStream();
+        inputStream.withCloseable {
+            Properties properties = new Properties()
+            properties.load(it)
+
+            if (properties.containsKey("maven.repositories.dir")){
+                println 'maven.repositories.dir: '+properties.getProperty("maven.repositories.dir")
+                ext.mavenRepositoriesDir = properties.getProperty("maven.repositories.dir")
+            }
         }
     }
 }

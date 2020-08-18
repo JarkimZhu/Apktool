@@ -1,6 +1,7 @@
 # Gradle
 .gradle/
 bin/
+local.properties
 
 # Build
 **/build/

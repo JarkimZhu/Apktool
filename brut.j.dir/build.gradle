@@ -20,3 +20,19 @@ dependencies {
                  depends.commons_io
   testImplementation depends.junit
 }
+
+apply plugin: 'maven'
+
+project.version = maven_version
+
+uploadArchives {
+  repositories.mavenDeployer {
+    def deployPath = file(project.mavenRepositoriesDir)
+    repository(url: "file://${deployPath.absolutePath}")
+    pom.project {
+      groupId project.group
+      artifactId project.name
+      version project.version
+    }
+  }
+}
